@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Speaking Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: rgba(255,255,255,0.08);
+    --accent1: #c8a96e;
+    --accent2: #7c6fcd;
+    --accent3: #4ecdc4;
+    --text: #f0ede8;
+    --text-muted: #888899;
+    --danger: #e05c5c;
+    --success: #5ce08a;
+    --p1: #c8a96e;
+    --p2: #7c6fcd;
+    --p3: #4ecdc4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(124,111,205,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(200,169,110,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .grain {
+    position: fixed;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 2rem 2rem 0;
+    text-align: center;
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .logo-icon {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+  }
+
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .logo-text span { color: var(--accent1); }
+
+  .subtitle {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* NAV TABS */
+  nav {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 2rem 1rem 0;
+  }
+
+  .tab-btn {
+    padding: 0.65rem 1.8rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tab-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .tab-btn.p1::before { background: linear-gradient(135deg, rgba(200,169,110,0.15), transparent); }
+  .tab-btn.p2::before { background: linear-gradient(135deg, rgba(124,111,205,0.15), transparent); }
+  .tab-btn.p3::before { background: linear-gradient(135deg, rgba(78,205,196,0.15), transparent); }
+
+  .tab-btn.active::before { opacity: 1; }
+  .tab-btn.active.p1 { border-color: var(--p1); color: var(--p1); }
+  .tab-btn.active.p2 { border-color: var(--p2); color: var(--p2); }
+  .tab-btn.active.p3 { border-color: var(--p3); color: var(--p3); }
+
+  .tab-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* MAIN */
+  main {
+    position: relative;
+    z-index: 10;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  /* PART PANEL */
+  .part-panel { display: none; }
+  .part-panel.active { display: block; animation: fadeUp 0.4s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* PART HEADER */
+  .part-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .part-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+  }
+
+  .part-title.p1 { color: var(--p1); }
+  .part-title.p2 { color: var(--p2); }
+  .part-title.p3 { color: var(--p3); }
+
+  .part-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+
+  .counter-badge {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: var(--surface2);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+  }
+
+  /* FLASHCARD */
+  .flashcard-wrap {
+    perspective: 1200px;
+    margin-bottom: 1.5rem;
+  }
+
+  .flashcard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s;
+  }
+
+  .flashcard::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .p1 .flashcard::before { background: linear-gradient(90deg, var(--p1), transparent); }
+  .p2 .flashcard::before { background: linear-gradient(90deg, var(--p2), transparent); }
+  .p3 .flashcard::before { background: linear-gradient(90deg, var(--p3), transparent); }
+
+  .card-number {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.2rem;
+  }
+
+  .card-question {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-topic {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .topic-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+
+  .p1 .topic-dot { background: var(--p1); }
+  .p2 .topic-dot { background: var(--p2); }
+  .p3 .topic-dot { background: var(--p3); }
+
+  /* Cue card specific */
+  .cue-points {
+    list-style: none;
+    margin-top: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .cue-points li {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .cue-points li::before {
+    content: '→';
+    color: var(--p2);
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+  }
+
+  /* CONTROLS ROW */
+  .controls-row {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
+
+  .btn-primary {
+    border: none;
+    color: #000;
+    font-weight: 600;
+  }
+
+  .btn-primary.p1 { background: var(--p1); }
+  .btn-primary.p2 { background: var(--p2); }
+  .btn-primary.p3 { background: var(--p3); }
+  .btn-primary:hover { opacity: 0.9; }
+
+  .btn-danger { border-color: var(--danger); color: var(--danger); }
+  .btn-danger:hover { background: rgba(224,92,92,0.1); }
+
+  .btn-success { border-color: var(--success); color: var(--success); }
+  .btn-success:hover { background: rgba(92,224,138,0.1); }
+
+  /* RECORDER SECTION */
+  .recorder-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+
+  .recorder-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.2rem;
+  }
+
+  .recorder-title {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .rec-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .rec-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  .rec-dot.recording {
+    background: var(--danger);
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Waveform */
+  .waveform {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    margin: 1rem 0;
+    overflow: hidden;
+  }
+
+  .wave-bar {
+    width: 3px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    transition: height 0.1s;
+  }
+
+  .wave-bar.active {
+    background: var(--accent1);
+    animation: wave 0.5s ease infinite;
+  }
+
+  @keyframes wave {
+    0%, 100% { height: 4px; }
+    50% { height: var(--h, 20px); }
+  }
+
+  .timer-display {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: var(--text-muted);
+    margin: 0.5rem 0;
+    transition: color 0.3s;
+  }
+
+  .timer-display.running { color: var(--danger); }
+  .timer-display.prep { color: var(--accent2); }
+
+  .recordings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .recording-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+  }
+
+  .recording-item audio {
+    flex: 1;
+    height: 32px;
+  }
+
+  .recording-item audio::-webkit-media-controls-panel { background: var(--surface2); }
+
+  .download-btn {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.75rem;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .download-btn:hover { border-color: var(--accent1); color: var(--accent1); }
+
+  /* PREP TIMER (Part 2) */
+  .prep-section {
+    background: rgba(124,111,205,0.08);
+    border: 1px solid rgba(124,111,205,0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    display: none;
+  }
+
+  .prep-section.visible { display: block; }
+
+  .prep-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--p2);
+    margin-bottom: 0.75rem;
+  }
+
+  .big-timer {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--p2);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s;
+  }
+
+  .big-timer.warning { color: var(--danger); }
+
+  .progress-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    margin-top: 1rem;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--p2);
+    transition: width 1s linear;
+  }
+
+  /* Empty state */
+  .empty-msg {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    padding: 1rem 0;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.85rem;
+    color: var(--text);
+    z-index: 999;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .card-question { font-size: 1.15rem; }
+    .controls-row { gap: 0.5rem; }
+    .btn { padding: 0.55rem 1rem; font-size: 0.8rem; }
+    .big-timer { font-size: 3rem; }
+    .part-title { font-size: 1.4rem; }
+    .tab-btn { padding: 0.55rem 1.1rem; font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🎙</div>
+    <div class="logo-text">IELTS <span>Speaking</span></div>
+  </div>
+  <div class="subtitle">Interactive Practice · 300 Questions</div>
+</header>
+
+<nav>
+  <button class="tab-btn p1 active" onclick="switchPart(1)">Part 1 · Interview</button>
+  <button class="tab-btn p2" onclick="switchPart(2)">Part 2 · Cue Card</button>
+  <button class="tab-btn p3" onclick="switchPart(3)">Part 3 · Discussion</button>
+</nav>
+
+<main>
+  <!-- PART 1 -->
+  <div class="part-panel p1 active" id="panel-1">
+    <div class="part-header">
+      <div>
+        <div class="part-title p1">Part 1 — Interview</div>
+        <div class="part-desc">Personal & familiar topics · 4–5 minutes</div>
+      </div>
+      <div class="counter-badge" id="counter-1">Q1 / 100</div>
+    </div>
+
+    <div class="flashcard-wrap p1">
+      <div class="flashcard" id="card-1">
+        <div class="card-number" id="qnum-1">QUESTION 001</div>
+        <div class="card-question" id="qtext-1">Loading question...</div>
+        <div class="card-topic">
+          <div class="topic-dot"></div>
+          <span id="qtopic-1"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <button class="btn btn-primary p1" onclick="nextCard(1)">⟳ New Question</button>
+      <button class="btn" onclick="prevCard(1)">← Previous</button>
+    </div>
+
+    <div class="recorder-section">
+      <div class="recorder-header">
+        <div class="recorder-title">🎙 Voice Recorder</div>
+        <div class="rec-status">
+          <div class="rec-dot" id="dot-1"></div>
+          <span id="rec-label-1">Ready</span>
+        </div>
+      </div>
+      <div class="waveform" id="wave-1">
+        <!-- bars injected by JS -->
+      </div>
+      <div class="timer-display" id="timer-1">00:00</div>
+      <div class="controls-row" style="justify-content:center; margin-bottom:1rem;">
+        <button class="btn btn-danger" id="recbtn-1" onclick="toggleRecord(1)">⏺ Start Recording</button>
+        <button class="btn btn-success" id="stopbtn-1" onclick="stopRecord(1)" style="display:none">⏹ Stop & Save</button>
+      </div>
+      <div class="recordings-list" id="rlist-1">
+        <div class="empty-msg">No recordings yet. Hit record to start!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 2 -->
+  <div class="part-panel p2" id="panel-2">
+    <div class="part-header">
+      <div>
+        <div class="part-title p2">Part 2 — Cue Card</div>
+        <div class="part-desc">1 min prep · 2 min talk</div>
+      </div>
+      <div class="counter-badge" id="counter-2">Card 1 / 100</div>
+    </div>
+
+    <div class="flashcard-wrap p2">
+      <div class="flashcard" id="card-2">
+        <div class="card-number" id="qnum-2">CUE CARD 001</div>
+        <div class="card-question" id="qtext-2">Loading cue card...</div>
+        <ul class="cue-points" id="cue-points-2"></ul>
+        <div class="card-topic">
+          <div class="topic-dot"></div>
+          <span id="qtopic-2"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <button class="btn btn-primary p2" onclick="nextCard(2)">⟳ New Cue Card</button>
+      <button class="btn" onclick="prevCard(2)">← Previous</button>
+      <button class="btn" id="prep-start-btn" onclick="startPrep()">⏱ Start 1-min Prep</button>
+    </div>
+
+    <!-- PREP TIMER -->
+    <div class="prep-section" id="prep-section">
+      <div class="prep-label">Preparation Time</div>
+      <div class="big-timer" id="prep-timer">1:00</div>
+      <div class="progress-bar"><div class="progress-fill" id="prep-fill" style="width:100%"></div></div>
+    </div>
+
+    <div class="recorder-section">
+      <div class="recorder-header">
+        <div class="recorder-title">🎙 Voice Recorder</div>
+        <div class="rec-status">
+          <div class="rec-dot" id="dot-2"></div>
+          <span id="rec-label-2">Ready</span>
+        </div>
+      </div>
+      <div class="waveform" id="wave-2"></div>
+      <div class="timer-display" id="timer-2">00:00</div>
+      <div class="controls-row" style="justify-content:center; margin-bottom:1rem;">
+        <button class="btn btn-danger" id="recbtn-2" onclick="toggleRecord(2)">⏺ Start Recording</button>
+        <button class="btn btn-success" id="stopbtn-2" onclick="stopRecord(2)" style="display:none">⏹ Stop & Save</button>
+      </div>
+      <div class="recordings-list" id="rlist-2">
+        <div class="empty-msg">No recordings yet. Hit record to start!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 3 -->
+  <div class="part-panel p3" id="panel-3">
+    <div class="part-header">
+      <div>
+        <div class="part-title p3">Part 3 — Discussion</div>
+        <div class="part-desc">Abstract & analytical topics · 4–5 minutes</div>
+      </div>
+      <div class="counter-badge" id="counter-3">Q1 / 100</div>
+    </div>
+
+    <div class="flashcard-wrap p3">
+      <div class="flashcard" id="card-3">
+        <div class="card-number" id="qnum-3">QUESTION 001</div>
+        <div class="card-question" id="qtext-3">Loading question...</div>
+        <div class="card-topic">
+          <div class="topic-dot"></div>
+          <span id="qtopic-3"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <button class="btn btn-primary p3" onclick="nextCard(3)">⟳ New Question</button>
+      <button class="btn" onclick="prevCard(3)">← Previous</button>
+    </div>
+
+    <div class="recorder-section">
+      <div class="recorder-header">
+        <div class="recorder-title">🎙 Voice Recorder</div>
+        <div class="rec-status">
+          <div class="rec-dot" id="dot-3"></div>
+          <span id="rec-label-3">Ready</span>
+        </div>
+      </div>
+      <div class="waveform" id="wave-3"></div>
+      <div class="timer-display" id="timer-3">00:00</div>
+      <div class="controls-row" style="justify-content:center; margin-bottom:1rem;">
+        <button class="btn btn-danger" id="recbtn-3" onclick="toggleRecord(3)">⏺ Start Recording</button>
+        <button class="btn btn-success" id="stopbtn-3" onclick="stopRecord(3)" style="display:none">⏹ Stop & Save</button>
+      </div>
+      <div class="recordings-list" id="rlist-3">
+        <div class="empty-msg">No recordings yet. Hit record to start!</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// =============================================
+// DATA — 300 IELTS Speaking Questions
+// =============================================
+
+const part1Questions = [
+  // HOME & ACCOMMODATION (10)
+  { q: "Do you live in a house or an apartment?", topic: "Home" },
+  { q: "What is your favourite room in your home? Why?", topic: "Home" },
+  { q: "Would you like to change anything about your home?", topic: "Home" },
+  { q: "Do you plan to live in the same place in the future?", topic: "Home" },
+  { q: "What kind of neighbourhood do you live in?", topic: "Home" },
+  { q: "How long have you lived in your current home?", topic: "Home" },
+  { q: "Is your home close to public transport?", topic: "Home" },
+  { q: "Do you have a garden or outdoor space at home?", topic: "Home" },
+  { q: "How is your home decorated?", topic: "Home" },
+  { q: "What do you like most about where you live?", topic: "Home" },
+  // WORK & STUDY (10)
+  { q: "Are you a student or do you work?", topic: "Work & Study" },
+  { q: "What subject do you study / What is your job?", topic: "Work & Study" },
+  { q: "Why did you choose that subject or career?", topic: "Work & Study" },
+  { q: "Do you enjoy your studies or work? Why?", topic: "Work & Study" },
+  { q: "What are your plans for the future in terms of career?", topic: "Work & Study" },
+  { q: "Is your workplace or school far from home?", topic: "Work & Study" },
+  { q: "Do you prefer working alone or in a team?", topic: "Work & Study" },
+  { q: "What do you find most challenging about your work or studies?", topic: "Work & Study" },
+  { q: "How do you usually get to work or school?", topic: "Work & Study" },
+  { q: "Would you recommend your job or course to others?", topic: "Work & Study" },
+  // HOMETOWN (8)
+  { q: "Where is your hometown?", topic: "Hometown" },
+  { q: "What do you like most about your hometown?", topic: "Hometown" },
+  { q: "Is there anything you dislike about your hometown?", topic: "Hometown" },
+  { q: "Has your hometown changed much over the years?", topic: "Hometown" },
+  { q: "What is your hometown famous for?", topic: "Hometown" },
+  { q: "Would you like to live in your hometown in the future?", topic: "Hometown" },
+  { q: "What kind of activities can people do in your hometown?", topic: "Hometown" },
+  { q: "Do tourists visit your hometown? Why?", topic: "Hometown" },
+  // HOBBIES & FREE TIME (10)
+  { q: "What do you do in your free time?", topic: "Hobbies" },
+  { q: "Do you have any hobbies? How did you get interested in them?", topic: "Hobbies" },
+  { q: "How much time do you spend on your hobbies each week?", topic: "Hobbies" },
+  { q: "Have your hobbies changed since you were a child?", topic: "Hobbies" },
+  { q: "Do you prefer indoor or outdoor activities?", topic: "Hobbies" },
+  { q: "Do you enjoy listening to music? What kind?", topic: "Hobbies" },
+  { q: "Are you interested in any sports? Why?", topic: "Hobbies" },
+  { q: "Do you watch a lot of TV or movies?", topic: "Hobbies" },
+  { q: "Would you like to try any new hobbies in the future?", topic: "Hobbies" },
+  { q: "Do you think hobbies are important? Why?", topic: "Hobbies" },
+  // FOOD & EATING (8)
+  { q: "What is your favourite food?", topic: "Food" },
+  { q: "Do you prefer cooking at home or eating out?", topic: "Food" },
+  { q: "Is there any food you dislike? Why?", topic: "Food" },
+  { q: "How often do you eat out at restaurants?", topic: "Food" },
+  { q: "What is a traditional dish from your country?", topic: "Food" },
+  { q: "Do you enjoy trying food from other countries?", topic: "Food" },
+  { q: "Do you have a healthy diet? Why or why not?", topic: "Food" },
+  { q: "Who usually cooks the food in your family?", topic: "Food" },
+  // TRAVEL & TRANSPORT (8)
+  { q: "Do you enjoy travelling? Why?", topic: "Travel" },
+  { q: "What countries have you visited?", topic: "Travel" },
+  { q: "What is your favourite mode of transport? Why?", topic: "Travel" },
+  { q: "Do you prefer travelling alone or with others?", topic: "Travel" },
+  { q: "Where would you most like to travel to in the future?", topic: "Travel" },
+  { q: "Do you experience traffic jams in your city?", topic: "Travel" },
+  { q: "How long does it take you to get to work or school?", topic: "Travel" },
+  { q: "Do you think public transport is good in your country?", topic: "Travel" },
+  // TECHNOLOGY (8)
+  { q: "How often do you use the internet?", topic: "Technology" },
+  { q: "What do you mostly use your smartphone for?", topic: "Technology" },
+  { q: "Do you think technology has improved our lives?", topic: "Technology" },
+  { q: "Do you prefer communicating by phone or in person?", topic: "Technology" },
+  { q: "Did you use technology a lot when you were a child?", topic: "Technology" },
+  { q: "Is there any technology you find difficult to use?", topic: "Technology" },
+  { q: "Do you use social media? How often?", topic: "Technology" },
+  { q: "How has technology changed your daily routine?", topic: "Technology" },
+  // SPORTS & FITNESS (8)
+  { q: "Do you do any exercise regularly?", topic: "Sports & Fitness" },
+  { q: "What sport did you play as a child?", topic: "Sports & Fitness" },
+  { q: "Do you prefer watching or playing sports?", topic: "Sports & Fitness" },
+  { q: "Is there a sport you would like to learn in the future?", topic: "Sports & Fitness" },
+  { q: "Do you think it is important to stay physically fit?", topic: "Sports & Fitness" },
+  { q: "Do you follow any sports teams?", topic: "Sports & Fitness" },
+  { q: "How popular is sport in your country?", topic: "Sports & Fitness" },
+  { q: "Have you ever been to a live sporting event?", topic: "Sports & Fitness" },
+  // READING & BOOKS (6)
+  { q: "Do you like reading? Why or why not?", topic: "Reading" },
+  { q: "What types of books do you enjoy?", topic: "Reading" },
+  { q: "Did you read a lot as a child?", topic: "Reading" },
+  { q: "Do you prefer e-books or physical books?", topic: "Reading" },
+  { q: "Can you name a book that influenced you?", topic: "Reading" },
+  { q: "Do you read newspapers or news online?", topic: "Reading" },
+  // WEATHER & SEASONS (6)
+  { q: "What is the weather like in your country?", topic: "Weather" },
+  { q: "What is your favourite season? Why?", topic: "Weather" },
+  { q: "Does the weather affect your mood?", topic: "Weather" },
+  { q: "Do you prefer hot or cold weather?", topic: "Weather" },
+  { q: "Has the weather in your country changed over the years?", topic: "Weather" },
+  { q: "What do you usually do on rainy days?", topic: "Weather" },
+  // SHOPPING (6)
+  { q: "Do you enjoy shopping? Why or why not?", topic: "Shopping" },
+  { q: "Do you prefer shopping online or in stores?", topic: "Shopping" },
+  { q: "What do you spend most of your money on?", topic: "Shopping" },
+  { q: "How often do you go shopping?", topic: "Shopping" },
+  { q: "Do you think people buy too many things they do not need?", topic: "Shopping" },
+  { q: "What was the last thing you bought?", topic: "Shopping" },
+  // FRIENDS & FAMILY (8)
+  { q: "Do you have a large or small family?", topic: "Family & Friends" },
+  { q: "How often do you spend time with your family?", topic: "Family & Friends" },
+  { q: "What do you usually do with your family on weekends?", topic: "Family & Friends" },
+  { q: "Do you prefer spending time with friends or family?", topic: "Family & Friends" },
+  { q: "How did you meet your closest friend?", topic: "Family & Friends" },
+  { q: "Do you have many friends or just a few close ones?", topic: "Family & Friends" },
+  { q: "How important is family in your culture?", topic: "Family & Friends" },
+  { q: "Do you keep in touch with old friends?", topic: "Family & Friends" },
+  // ART & MUSIC (6)
+  { q: "Are you interested in art? Why or why not?", topic: "Art & Music" },
+  { q: "Can you play any musical instruments?", topic: "Art & Music" },
+  { q: "Do you attend concerts or art exhibitions?", topic: "Art & Music" },
+  { q: "What type of music do you enjoy most?", topic: "Art & Music" },
+  { q: "Did you study any form of art or music at school?", topic: "Art & Music" },
+  { q: "Do you think art is an important part of society?", topic: "Art & Music" },
+  // ENVIRONMENT & NATURE (6)
+  { q: "Do you spend much time in nature?", topic: "Environment" },
+  { q: "Are you concerned about environmental issues?", topic: "Environment" },
+  { q: "What do you do in daily life to help the environment?", topic: "Environment" },
+  { q: "Do you think people recycle enough in your country?", topic: "Environment" },
+  { q: "Would you prefer to live in the city or the countryside?", topic: "Environment" },
+  { q: "What is your favourite natural place in the world?", topic: "Environment" },
+];
+
+const part2CueCards = [
+  // PEOPLE
+  { q: "Describe a person who has had a great influence on your life.", points: ["Who this person is", "How you know them", "What influence they have had", "Why they are important to you"], topic: "People" },
+  { q: "Describe a famous person you would like to meet.", points: ["Who this person is", "Why they are famous", "What you would talk about", "Why you want to meet them"], topic: "People" },
+  { q: "Describe a teacher who made a big impression on you.", points: ["Who this teacher was", "What subject they taught", "What made them special", "How they influenced you"], topic: "People" },
+  { q: "Describe an elderly person you admire.", points: ["Who this person is", "How you know them", "What qualities you admire", "Why you find them inspiring"], topic: "People" },
+  { q: "Describe a child that you know.", points: ["Who this child is", "How you know them", "What they are like", "What you enjoy about spending time with them"], topic: "People" },
+  { q: "Describe a person who is good at their job.", points: ["Who this person is", "What their job is", "How they perform their job", "Why you admire their work"], topic: "People" },
+  { q: "Describe a friend who has had a positive effect on your life.", points: ["Who this friend is", "How you met", "What influence they have had", "Why they are important to you"], topic: "People" },
+  { q: "Describe a person you know who speaks a second language very well.", points: ["Who this person is", "What language they speak", "How they learned it", "Why you find this impressive"], topic: "People" },
+  // PLACES
+  { q: "Describe a place you have visited that you really enjoyed.", points: ["Where this place is", "When you visited", "What you did there", "Why you enjoyed it so much"], topic: "Places" },
+  { q: "Describe a city you have visited that you would like to live in.", points: ["Which city", "When you visited", "What you liked about it", "Why you would like to live there"], topic: "Places" },
+  { q: "Describe a natural beauty spot you have visited.", points: ["Where it is", "When and who you went with", "What you did there", "Why it was beautiful"], topic: "Places" },
+  { q: "Describe a quiet place where you like to spend time.", points: ["Where this place is", "How often you go there", "What you do there", "Why you like it"], topic: "Places" },
+  { q: "Describe a place in your country that you think visitors should see.", points: ["Where it is", "What is special about it", "What visitors can do there", "Why you recommend it"], topic: "Places" },
+  { q: "Describe a shop or market you enjoy visiting.", points: ["Where it is", "What is sold there", "How often you go", "Why you enjoy visiting"], topic: "Places" },
+  { q: "Describe a museum or gallery you have visited.", points: ["Where it is", "When you visited", "What you saw there", "How it affected you"], topic: "Places" },
+  { q: "Describe a restaurant or café where you like to go.", points: ["Where it is", "What kind of food is served", "Who you go with", "Why you like it"], topic: "Places" },
+  { q: "Describe a place in nature where you feel relaxed.", points: ["Where this place is", "How you found it", "What you do there", "Why it relaxes you"], topic: "Places" },
+  // OBJECTS
+  { q: "Describe an important object that you own.", points: ["What the object is", "Where you got it from", "How long you have had it", "Why it is important to you"], topic: "Objects" },
+  { q: "Describe a gift you received that was very special.", points: ["What it was", "Who gave it to you", "When you received it", "Why it was special"], topic: "Objects" },
+  { q: "Describe a piece of technology you use every day.", points: ["What it is", "How long you have used it", "What you use it for", "Why it is important to you"], topic: "Objects" },
+  { q: "Describe a book that has had a great effect on you.", points: ["What the book is called", "What it is about", "When you read it", "Why it had an effect on you"], topic: "Objects" },
+  { q: "Describe a piece of clothing that you consider special.", points: ["What it is", "Where you got it", "When you wear it", "Why it is special to you"], topic: "Objects" },
+  { q: "Describe a vehicle you would like to own.", points: ["What type of vehicle", "What it looks like", "Why you would like it", "How you would use it"], topic: "Objects" },
+  { q: "Describe something you own that you would never throw away.", points: ["What it is", "Where it came from", "How long you have had it", "Why you will keep it"], topic: "Objects" },
+  // EVENTS
+  { q: "Describe a celebration or festival in your country.", points: ["What the celebration is", "When it happens", "How people celebrate", "Why it is important"], topic: "Events" },
+  { q: "Describe a memorable event from your childhood.", points: ["What the event was", "When it happened", "Who was there", "Why you remember it so well"], topic: "Events" },
+  { q: "Describe a wedding or special ceremony you have attended.", points: ["What kind of event it was", "Where it took place", "What happened", "Why it was special"], topic: "Events" },
+  { q: "Describe a sporting event you have watched or attended.", points: ["What event it was", "When and where", "What happened", "Why you enjoyed it"], topic: "Events" },
+  { q: "Describe a concert or live performance you enjoyed.", points: ["What the performance was", "Where and when it took place", "What made it enjoyable", "How you felt"], topic: "Events" },
+  { q: "Describe a time when you received some good news.", points: ["What the news was", "When and how you received it", "How you reacted", "How it changed things"], topic: "Events" },
+  { q: "Describe a time when you helped someone.", points: ["Who you helped", "What the situation was", "How you helped", "How you felt afterwards"], topic: "Events" },
+  { q: "Describe a time when you were very busy.", points: ["When this was", "What you were doing", "How you managed your time", "How you felt"], topic: "Events" },
+  // EXPERIENCES
+  { q: "Describe an experience that changed your opinion about something.", points: ["What the experience was", "When it happened", "What opinion changed", "Why it changed"], topic: "Experiences" },
+  { q: "Describe a time when you learned something new.", points: ["What you learned", "When and where you learned it", "How you learned it", "Why it was valuable"], topic: "Experiences" },
+  { q: "Describe a time when you worked as part of a team.", points: ["What the task was", "Who else was involved", "What your role was", "What you learned from it"], topic: "Experiences" },
+  { q: "Describe an experience of living abroad or travelling to a new country.", points: ["Where you went", "Why you went", "What you experienced", "How it affected you"], topic: "Experiences" },
+  { q: "Describe a time when you were lost.", points: ["Where you were", "How you got lost", "How you felt", "How you found your way"], topic: "Experiences" },
+  { q: "Describe a time when you had to speak in public.", points: ["What the occasion was", "What you spoke about", "How you felt beforehand", "How it went"], topic: "Experiences" },
+  { q: "Describe a difficult decision you had to make.", points: ["What the decision was", "What choices you had", "How you made the decision", "The outcome"], topic: "Experiences" },
+  { q: "Describe a skill you would like to learn.", points: ["What the skill is", "Why you want to learn it", "How you would learn it", "What benefits it would bring"], topic: "Experiences" },
+  // ACTIVITIES
+  { q: "Describe an activity you enjoy doing outdoors.", points: ["What the activity is", "When and where you do it", "Who you do it with", "Why you enjoy it"], topic: "Activities" },
+  { q: "Describe a hobby you have had for a long time.", points: ["What the hobby is", "How you started it", "How much time you spend on it", "Why you enjoy it"], topic: "Activities" },
+  { q: "Describe a form of exercise you enjoy.", points: ["What it is", "How often you do it", "How you got started", "Why you enjoy it"], topic: "Activities" },
+  { q: "Describe a creative activity you enjoy.", points: ["What the activity is", "When you do it", "How you do it", "Why you find it rewarding"], topic: "Activities" },
+  { q: "Describe a time when you cooked a meal for others.", points: ["What you cooked", "Who you cooked for", "How it went", "How people reacted"], topic: "Activities" },
+  { q: "Describe something you do to stay healthy.", points: ["What you do", "How often you do it", "How long you have done it", "Why you think it is effective"], topic: "Activities" },
+  // MEDIA & CULTURE
+  { q: "Describe a film you have seen recently that you enjoyed.", points: ["What the film is called", "What it is about", "Why you chose to watch it", "Why you enjoyed it"], topic: "Media & Culture" },
+  { q: "Describe a TV programme that you like watching.", points: ["What it is", "What it is about", "How often you watch it", "Why you enjoy it"], topic: "Media & Culture" },
+  { q: "Describe a piece of music or a song that is special to you.", points: ["What it is", "When you first heard it", "What it means to you", "Why it is special"], topic: "Media & Culture" },
+  { q: "Describe a piece of artwork that you admire.", points: ["What it is", "Where you saw it", "What it looks like", "Why you admire it"], topic: "Media & Culture" },
+  { q: "Describe a website or app you use regularly.", points: ["What it is", "How long you have used it", "What you use it for", "Why you find it useful"], topic: "Media & Culture" },
+  // EDUCATION & CAREER
+  { q: "Describe a subject that you enjoyed studying at school.", points: ["What the subject was", "Who taught it", "What you learned", "Why you enjoyed it"], topic: "Education" },
+  { q: "Describe a project or assignment you completed at school or work.", points: ["What it was", "How you approached it", "Who helped you", "What the outcome was"], topic: "Education" },
+  { q: "Describe a job you would like to have in the future.", points: ["What the job is", "What it involves", "What skills are needed", "Why you want this job"], topic: "Education" },
+  { q: "Describe an important exam or test you took.", points: ["What the exam was", "When you took it", "How you prepared", "What the result was"], topic: "Education" },
+  // SOCIAL & COMMUNITY
+  { q: "Describe a time when you visited a friend or relative.", points: ["Who you visited", "Where they live", "What you did together", "Why the visit was memorable"], topic: "Social" },
+  { q: "Describe a social event you attended and enjoyed.", points: ["What the event was", "When and where it took place", "Who was there", "Why you enjoyed it"], topic: "Social" },
+  { q: "Describe a time when you had to wait for a long time.", points: ["What you were waiting for", "How long you waited", "How you passed the time", "How you felt"], topic: "Social" },
+  { q: "Describe a problem in your community that you would like to solve.", points: ["What the problem is", "How it affects people", "What causes it", "How you would solve it"], topic: "Social" },
+  // FUTURE & PLANS
+  { q: "Describe a goal you have set for the next five years.", points: ["What the goal is", "Why you have set it", "How you plan to achieve it", "What challenges you expect"], topic: "Future & Plans" },
+  { q: "Describe a country you would like to visit in the future.", points: ["Which country", "Why you want to go", "What you would do there", "When you plan to go"], topic: "Future & Plans" },
+  { q: "Describe something new you would like to try in the future.", points: ["What it is", "Why you want to try it", "How you would go about it", "What you hope to gain"], topic: "Future & Plans" },
+  { q: "Describe a dream you have for your career.", points: ["What it is", "Why you have this dream", "What steps you are taking", "What success would mean to you"], topic: "Future & Plans" },
+  // ENVIRONMENT & NATURE
+  { q: "Describe a beautiful natural scene you have witnessed.", points: ["What the scene was", "Where it was", "When you saw it", "What made it beautiful"], topic: "Nature" },
+  { q: "Describe an animal that you find interesting.", points: ["What the animal is", "Where it lives", "What makes it interesting", "Why you chose this animal"], topic: "Nature" },
+  { q: "Describe a garden or park that you like.", points: ["Where it is", "What it looks like", "What you do there", "Why you enjoy it"], topic: "Nature" },
+  { q: "Describe an environmental problem you are concerned about.", points: ["What the problem is", "What causes it", "How it affects life", "What can be done"], topic: "Nature" },
+  // CHILDHOOD & MEMORIES
+  { q: "Describe a happy memory from your childhood.", points: ["What the memory is", "How old you were", "Who was involved", "Why it is a happy memory"], topic: "Memories" },
+  { q: "Describe a toy or game you played with as a child.", points: ["What it was", "How you played with it", "Who you played with", "Why it was special"], topic: "Memories" },
+  { q: "Describe a family tradition you have.", points: ["What the tradition is", "How it started", "What happens", "Why it is important to your family"], topic: "Memories" },
+  { q: "Describe a teacher who taught you when you were young.", points: ["Who they were", "What they taught", "What made them memorable", "How they influenced you"], topic: "Memories" },
+  // FOOD & LIFESTYLE
+  { q: "Describe a meal that was memorable to you.", points: ["What the meal was", "When and where you had it", "Who you were with", "Why it was memorable"], topic: "Food & Lifestyle" },
+  { q: "Describe a healthy habit you have.", points: ["What the habit is", "How long you have had it", "Why you started", "The benefits it brings"], topic: "Food & Lifestyle" },
+  { q: "Describe a recipe you know well.", points: ["What the dish is", "What ingredients are needed", "How you make it", "When you make it"], topic: "Food & Lifestyle" },
+  { q: "Describe a local food or drink that visitors should try.", points: ["What it is", "How it is made", "Where to try it", "Why visitors should try it"], topic: "Food & Lifestyle" },
+  // RANDOM ADDITIONAL
+  { q: "Describe a time when you were particularly creative.", points: ["When this was", "What you created", "How you came up with the idea", "How you felt about the result"], topic: "Creativity" },
+  { q: "Describe something you borrowed from someone else.", points: ["What you borrowed", "Why you needed it", "How long you had it", "How it helped you"], topic: "Misc" },
+  { q: "Describe an occasion when you were very late for something.", points: ["What you were late for", "Why you were late", "What happened as a result", "How you felt"], topic: "Misc" },
+  { q: "Describe a risk that you have taken.", points: ["What the risk was", "Why you took it", "What happened", "Would you take the risk again?"], topic: "Misc" },
+  { q: "Describe something that made you laugh a lot.", points: ["What happened", "Who was involved", "Why it was so funny", "How you felt afterwards"], topic: "Misc" },
+  { q: "Describe an ambition that you have not yet achieved.", points: ["What it is", "How long you have had this ambition", "What steps you are taking", "Why it matters to you"], topic: "Ambitions" },
+  { q: "Describe a time you had to apologise to someone.", points: ["Who you apologised to", "What had happened", "How you apologised", "What the outcome was"], topic: "Misc" },
+  { q: "Describe a piece of advice that you received which was helpful.", points: ["What the advice was", "Who gave it to you", "When you received it", "How it helped you"], topic: "Misc" },
+  { q: "Describe a time when you witnessed an act of kindness.", points: ["What happened", "Who was involved", "How it made you feel", "Why kindness matters to you"], topic: "Values" },
+  { q: "Describe a time when you used public transport in an interesting way.", points: ["What mode of transport", "Where you were going", "What happened", "What you remember most"], topic: "Travel" },
+  { q: "Describe a time when you saw something interesting in the street.", points: ["What you saw", "Where and when it happened", "What made it interesting", "How you felt"], topic: "Misc" },
+  { q: "Describe a time when you changed your mind about something important.", points: ["What you changed your mind about", "What caused the change", "How you felt", "What impact it had"], topic: "Values" },
+  { q: "Describe a language other than English that you think is useful to learn.", points: ["What language it is", "Who speaks it", "Why it is useful", "Would you learn it?"], topic: "Language" },
+  { q: "Describe something you do to relax after a stressful day.", points: ["What you do", "How long you spend on it", "Where you usually do it", "Why it helps you relax"], topic: "Lifestyle" },
+  { q: "Describe a place where you go to enjoy yourself.", points: ["Where it is", "Who you go with", "What you do there", "Why you enjoy it so much"], topic: "Places" },
+];
+
+const part3Questions = [
+  // TECHNOLOGY & SOCIETY
+  { q: "How has technology changed the way we communicate with each other?", topic: "Technology & Society" },
+  { q: "Do you think people are becoming too dependent on technology? Why?", topic: "Technology & Society" },
+  { q: "What are the advantages and disadvantages of social media?", topic: "Technology & Society" },
+  { q: "How do you think technology will change our lives in the next 20 years?", topic: "Technology & Society" },
+  { q: "Do you think children should learn how to code at school? Why?", topic: "Technology & Society" },
+  { q: "Is the internet making people more or less intelligent? Why?", topic: "Technology & Society" },
+  { q: "How is artificial intelligence changing the job market?", topic: "Technology & Society" },
+  { q: "Should there be limits on how much time children spend using technology?", topic: "Technology & Society" },
+  { q: "Do you think technology brings people together or pushes them apart?", topic: "Technology & Society" },
+  // EDUCATION
+  { q: "Should education be free at all levels? Why or why not?", topic: "Education" },
+  { q: "What is the most important subject to study in school? Why?", topic: "Education" },
+  { q: "How has the purpose of education changed over the last century?", topic: "Education" },
+  { q: "Is it better to study at a university or to learn through practical experience?", topic: "Education" },
+  { q: "Should schools put more emphasis on developing creativity?", topic: "Education" },
+  { q: "How should governments decide how much to spend on education?", topic: "Education" },
+  { q: "Do exams accurately measure a student's abilities? Why or why not?", topic: "Education" },
+  { q: "Why do some students do well in school while others struggle?", topic: "Education" },
+  { q: "How important is it for students to learn a foreign language at school?", topic: "Education" },
+  // ENVIRONMENT
+  { q: "Who is most responsible for protecting the environment – governments, companies, or individuals?", topic: "Environment" },
+  { q: "What can individuals do to reduce their carbon footprint?", topic: "Environment" },
+  { q: "Should plastic bags be banned globally? What effect would this have?", topic: "Environment" },
+  { q: "How serious is the problem of climate change in your view?", topic: "Environment" },
+  { q: "Do you think renewable energy can fully replace fossil fuels? When?", topic: "Environment" },
+  { q: "Why do you think people continue to damage the environment despite warnings?", topic: "Environment" },
+  { q: "How can governments encourage people to live more sustainable lives?", topic: "Environment" },
+  { q: "Should countries with higher emissions pay more to tackle climate change?", topic: "Environment" },
+  { q: "What role should businesses play in protecting the environment?", topic: "Environment" },
+  // HEALTH & MEDICINE
+  { q: "Should healthcare be free and provided by the government? Why?", topic: "Health" },
+  { q: "Why do you think unhealthy food is often cheaper than healthy food?", topic: "Health" },
+  { q: "How can governments encourage people to lead healthier lifestyles?", topic: "Health" },
+  { q: "What are the main causes of stress in modern society?", topic: "Health" },
+  { q: "How important is mental health compared to physical health?", topic: "Health" },
+  { q: "Do you think people live longer than they should because of medical advances?", topic: "Health" },
+  { q: "Is sport participation important for a child's development? Why?", topic: "Health" },
+  { q: "Should junk food advertising be banned? Why or why not?", topic: "Health" },
+  // WORK & ECONOMY
+  { q: "What makes a job satisfying, in your opinion?", topic: "Work & Economy" },
+  { q: "Is it possible to find a balance between work and personal life? How?", topic: "Work & Economy" },
+  { q: "Do you think remote working will become the norm in the future?", topic: "Work & Economy" },
+  { q: "Should the government provide a universal basic income?", topic: "Work & Economy" },
+  { q: "Why is youth unemployment a problem in many countries?", topic: "Work & Economy" },
+  { q: "Are men and women treated equally in the workplace today?", topic: "Work & Economy" },
+  { q: "Should companies be allowed to pay their CEOs hundreds of times more than employees?", topic: "Work & Economy" },
+  { q: "How important is volunteering for society?", topic: "Work & Economy" },
+  { q: "Will robots ever replace human workers completely? What would be the consequences?", topic: "Work & Economy" },
+  // CULTURE & SOCIETY
+  { q: "How does culture influence a person's identity?", topic: "Culture & Society" },
+  { q: "Is globalisation generally a positive or negative phenomenon? Why?", topic: "Culture & Society" },
+  { q: "Should minority languages be protected by governments? How?", topic: "Culture & Society" },
+  { q: "How do traditional values conflict with modern lifestyles?", topic: "Culture & Society" },
+  { q: "What are the benefits of living in a multicultural society?", topic: "Culture & Society" },
+  { q: "Are national identities becoming less important in the modern world?", topic: "Culture & Society" },
+  { q: "Should governments invest in arts and culture? Why?", topic: "Culture & Society" },
+  { q: "How does travel affect a person's view of the world?", topic: "Culture & Society" },
+  // FAMILY & RELATIONSHIPS
+  { q: "How has the role of the family changed in modern society?", topic: "Family & Relationships" },
+  { q: "Should parents control what their children watch on TV or the internet?", topic: "Family & Relationships" },
+  { q: "Is it important to live close to family members? Why?", topic: "Family & Relationships" },
+  { q: "What responsibilities do adult children have towards their ageing parents?", topic: "Family & Relationships" },
+  { q: "How has the definition of family changed over the past few decades?", topic: "Family & Relationships" },
+  { q: "Do you think having fewer children is better for society? Why?", topic: "Family & Relationships" },
+  { q: "Should the government provide more support for working parents?", topic: "Family & Relationships" },
+  // MEDIA & COMMUNICATION
+  { q: "How has the rise of fake news affected society?", topic: "Media" },
+  { q: "Should the government regulate what is posted on social media?", topic: "Media" },
+  { q: "Do newspapers still have an important role in modern society?", topic: "Media" },
+  { q: "How do celebrities influence people's behaviour and values?", topic: "Media" },
+  { q: "Is advertising manipulative? Should there be stricter regulations?", topic: "Media" },
+  { q: "How has streaming changed the entertainment industry?", topic: "Media" },
+  { q: "Do you think privacy is still possible in the age of social media?", topic: "Media" },
+  // CRIME & JUSTICE
+  { q: "What are the main causes of crime in modern society?", topic: "Crime & Justice" },
+  { q: "Is prison an effective way of dealing with criminals? Why?", topic: "Crime & Justice" },
+  { q: "Should punishment or rehabilitation be the main goal of the justice system?", topic: "Crime & Justice" },
+  { q: "Should the death penalty be abolished worldwide? Why?", topic: "Crime & Justice" },
+  { q: "Why do you think some people turn to crime despite knowing the consequences?", topic: "Crime & Justice" },
+  { q: "How can communities help prevent crime?", topic: "Crime & Justice" },
+  { q: "Do surveillance cameras help reduce crime or invade people's privacy?", topic: "Crime & Justice" },
+  // TRAVEL & TOURISM
+  { q: "How does mass tourism affect the countries people visit?", topic: "Travel & Tourism" },
+  { q: "Should there be limits on the number of tourists allowed in certain places?", topic: "Travel & Tourism" },
+  { q: "How has the way people travel changed in recent years?", topic: "Travel & Tourism" },
+  { q: "Is it important for people to experience other cultures through travel?", topic: "Travel & Tourism" },
+  { q: "What are the environmental impacts of international tourism?", topic: "Travel & Tourism" },
+  { q: "Do you think budget airlines have been good or bad for the world?", topic: "Travel & Tourism" },
+  // SCIENCE & INNOVATION
+  { q: "What scientific discovery do you think has most changed human life?", topic: "Science & Innovation" },
+  { q: "Should governments invest more in space exploration? Why?", topic: "Science & Innovation" },
+  { q: "What are the ethical implications of genetic engineering?", topic: "Science & Innovation" },
+  { q: "Is it ethical to use animals for medical research?", topic: "Science & Innovation" },
+  { q: "How might advances in medicine change our society in the next 50 years?", topic: "Science & Innovation" },
+  // POLITICS & GOVERNANCE
+  { q: "What qualities make a great political leader?", topic: "Politics" },
+  { q: "Should voting be compulsory? Why or why not?", topic: "Politics" },
+  { q: "How can ordinary citizens influence political decisions?", topic: "Politics" },
+  { q: "Is democracy the best form of government? Why?", topic: "Politics" },
+  { q: "What is the most pressing issue governments face today?", topic: "Politics" },
+  { q: "Should rich countries do more to help developing nations?", topic: "Politics" },
+  // FOOD & AGRICULTURE
+  { q: "How has modern food production affected our health and the environment?", topic: "Food & Agriculture" },
+  { q: "Should people eat less meat to help the environment?", topic: "Food & Agriculture" },
+  { q: "Is organic food really better for us, or is it just a trend?", topic: "Food & Agriculture" },
+  { q: "What can be done about food waste in developed countries?", topic: "Food & Agriculture" },
+  { q: "How important is food culture to a nation's identity?", topic: "Food & Agriculture" },
+  // VALUES & ETHICS
+  { q: "How important is it to maintain traditional values in a changing world?", topic: "Values & Ethics" },
+  { q: "Is it ever acceptable to lie? Can you give examples?", topic: "Values & Ethics" },
+  { q: "How do people's values change as they get older?", topic: "Values & Ethics" },
+  { q: "Is material wealth necessary for happiness?", topic: "Values & Ethics" },
+  { q: "What responsibilities do wealthy people have towards the less fortunate?", topic: "Values & Ethics" },
+  { q: "Is competition good or bad for society overall?", topic: "Values & Ethics" },
+  { q: "How has the concept of success changed in modern times?", topic: "Values & Ethics" },
+];
+
+// =============================================
+// STATE
+// =============================================
+const state = {
+  1: { current: 0, history: [], questions: part1Questions },
+  2: { current: 0, history: [], questions: part2CueCards },
+  3: { current: 0, history: [], questions: part3Questions }
+};
+
+// Shuffle arrays at start
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+shuffle(part1Questions);
+shuffle(part2CueCards);
+shuffle(part3Questions);
+
+// Recorder state
+const recState = { 1: null, 2: null, 3: null };
+const recChunks = { 1: [], 2: [], 3: [] };
+const recTimer = { 1: null, 2: null, 3: null };
+const recSeconds = { 1: 0, 2: 0, 3: 0 };
+const recBlobs = { 1: [], 2: [], 3: [] };
+
+// Prep timer state
+let prepInterval = null;
+let prepSecondsLeft = 60;
+let prepRunning = false;
+
+// =============================================
+// INIT
+// =============================================
+window.addEventListener('load', () => {
+  [1, 2, 3].forEach(p => {
+    buildWaveform(p);
+    renderCard(p);
+  });
+});
+
+function buildWaveform(p) {
+  const w = document.getElementById('wave-' + p);
+  for (let i = 0; i < 40; i++) {
+    const b = document.createElement('div');
+    b.className = 'wave-bar';
+    b.id = `wb-${p}-${i}`;
+    w.appendChild(b);
+  }
+}
+
+// =============================================
+// CARD RENDERING
+// =============================================
+function renderCard(p) {
+  const s = state[p];
+  const idx = s.current;
+  const q = s.questions[idx];
+  const num = String(idx + 1).padStart(3, '0');
+
+  if (p === 1) {
+    document.getElementById('qnum-1').textContent = `QUESTION ${num}`;
+    document.getElementById('qtext-1').textContent = q.q;
+    document.getElementById('qtopic-1').textContent = q.topic;
+    document.getElementById('counter-1').textContent = `Q${idx+1} / 100`;
+  } else if (p === 2) {
+    document.getElementById('qnum-2').textContent = `CUE CARD ${num}`;
+    document.getElementById('qtext-2').textContent = q.q;
+    document.getElementById('qtopic-2').textContent = q.topic;
+    document.getElementById('counter-2').textContent = `Card ${idx+1} / 100`;
+    const ul = document.getElementById('cue-points-2');
+    ul.innerHTML = '';
+    q.points.forEach(pt => {
+      const li = document.createElement('li');
+      li.textContent = pt;
+      ul.appendChild(li);
+    });
+    // Reset prep timer visual
+    resetPrepTimer();
+  } else {
+    document.getElementById('qnum-3').textContent = `QUESTION ${num}`;
+    document.getElementById('qtext-3').textContent = q.q;
+    document.getElementById('qtopic-3').textContent = q.topic;
+    document.getElementById('counter-3').textContent = `Q${idx+1} / 100`;
+  }
+
+  // Card flip animation
+  const card = document.getElementById('card-' + p);
+  card.style.transform = 'scale(0.96)';
+  setTimeout(() => card.style.transform = 'scale(1)', 200);
+}
+
+function nextCard(p) {
+  const s = state[p];
+  s.history.push(s.current);
+  s.current = (s.current + 1) % s.questions.length;
+  renderCard(p);
+}
+
+function prevCard(p) {
+  const s = state[p];
+  if (s.history.length > 0) {
+    s.current = s.history.pop();
+    renderCard(p);
+  } else {
+    showToast('No previous card!');
+  }
+}
+
+// =============================================
+// TAB SWITCHING
+// =============================================
+function switchPart(p) {
+  document.querySelectorAll('.part-panel').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('panel-' + p).classList.add('active');
+  document.querySelectorAll('.tab-btn')[p-1].classList.add('active');
+}
+
+// =============================================
+// RECORDING
+// =============================================
+async function toggleRecord(p) {
+  if (recState[p] && recState[p].state === 'recording') return;
+  
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mr = new MediaRecorder(stream);
+    recState[p] = mr;
+    recChunks[p] = [];
+
+    mr.ondataavailable = e => { if (e.data.size > 0) recChunks[p].push(e.data); };
+    mr.onstop = () => saveRecording(p, stream);
+
+    mr.start(100);
+    startRecordTimer(p);
+    animateWave(p, true);
+
+    document.getElementById('dot-' + p).classList.add('recording');
+    document.getElementById('rec-label-' + p).textContent = 'Recording...';
+    document.getElementById('recbtn-' + p).style.display = 'none';
+    document.getElementById('stopbtn-' + p).style.display = 'inline-flex';
+
+    // Part 2: also start 2-min countdown
+    if (p === 2) {
+      startTalkTimer();
+    }
+  } catch(err) {
+    showToast('Microphone access denied. Please allow mic access.');
+  }
+}
+
+function stopRecord(p) {
+  if (recState[p] && recState[p].state === 'recording') {
+    recState[p].stop();
+  }
+  stopRecordTimer(p);
+  animateWave(p, false);
+
+  document.getElementById('dot-' + p).classList.remove('recording');
+  document.getElementById('rec-label-' + p).textContent = 'Saved!';
+  document.getElementById('recbtn-' + p).style.display = 'inline-flex';
+  document.getElementById('stopbtn-' + p).style.display = 'none';
+
+  setTimeout(() => {
+    document.getElementById('rec-label-' + p).textContent = 'Ready';
+  }, 2000);
+
+  if (p === 2) stopTalkTimer();
+}
+
+function saveRecording(p, stream) {
+  stream.getTracks().forEach(t => t.stop());
+  const blob = new Blob(recChunks[p], { type: 'audio/webm' });
+  recBlobs[p].push(blob);
+  const url = URL.createObjectURL(blob);
+  const idx = recBlobs[p].length;
+  const list = document.getElementById('rlist-' + p);
+
+  if (list.querySelector('.empty-msg')) list.innerHTML = '';
+
+  const item = document.createElement('div');
+  item.className = 'recording-item';
+
+  const audio = document.createElement('audio');
+  audio.controls = true;
+  audio.src = url;
+
+  const dlBtn = document.createElement('button');
+  dlBtn.className = 'download-btn';
+  dlBtn.textContent = '↓ Download';
+  const partLabel = p === 2 ? 'CueCard' : `Part${p}`;
+  const qNum = state[p].current + 1;
+  dlBtn.onclick = () => {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `IELTS-${partLabel}-Q${qNum}-Recording${idx}.webm`;
+    a.click();
+  };
+
+  item.appendChild(audio);
+  item.appendChild(dlBtn);
+  list.insertBefore(item, list.firstChild);
+  showToast(`Recording #${idx} saved!`);
+}
+
+function startRecordTimer(p) {
+  recSeconds[p] = 0;
+  recTimer[p] = setInterval(() => {
+    recSeconds[p]++;
+    const m = String(Math.floor(recSeconds[p] / 60)).padStart(2, '0');
+    const s = String(recSeconds[p] % 60).padStart(2, '0');
+    const el = document.getElementById('timer-' + p);
+    el.textContent = `${m}:${s}`;
+    el.classList.add('running');
+  }, 1000);
+}
+
+function stopRecordTimer(p) {
+  clearInterval(recTimer[p]);
+  const el = document.getElementById('timer-' + p);
+  el.classList.remove('running');
+}
+
+// Waveform animation
+let waveAnimFrame = { 1: null, 2: null, 3: null };
+
+function animateWave(p, on) {
+  if (!on) {
+    cancelAnimationFrame(waveAnimFrame[p]);
+    for (let i = 0; i < 40; i++) {
+      const b = document.getElementById(`wb-${p}-${i}`);
+      if (b) { b.style.height = '4px'; b.classList.remove('active'); b.style.background = 'var(--border)'; }
+    }
+    return;
+  }
+  function frame() {
+    for (let i = 0; i < 40; i++) {
+      const b = document.getElementById(`wb-${p}-${i}`);
+      if (b) {
+        const h = 4 + Math.random() * 40;
+        b.style.height = h + 'px';
+        b.style.background = p === 1 ? 'var(--p1)' : p === 2 ? 'var(--p2)' : 'var(--p3)';
+      }
+    }
+    waveAnimFrame[p] = requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+// =============================================
+// PART 2 PREP TIMER
+// =============================================
+function startPrep() {
+  if (prepRunning) return;
+  prepRunning = true;
+  prepSecondsLeft = 60;
+  const section = document.getElementById('prep-section');
+  section.classList.add('visible');
+  updatePrepDisplay();
+
+  prepInterval = setInterval(() => {
+    prepSecondsLeft--;
+    updatePrepDisplay();
+    if (prepSecondsLeft <= 0) {
+      clearInterval(prepInterval);
+      prepRunning = false;
+      document.getElementById('prep-timer').textContent = '0:00';
+      document.getElementById('prep-fill').style.width = '0%';
+      showToast('Preparation time is up! Start speaking!');
+      document.getElementById('prep-timer').classList.add('warning');
+    }
+  }, 1000);
+}
+
+function updatePrepDisplay() {
+  const m = Math.floor(prepSecondsLeft / 60);
+  const s = String(prepSecondsLeft % 60).padStart(2, '0');
+  document.getElementById('prep-timer').textContent = `${m}:${s}`;
+  const pct = (prepSecondsLeft / 60) * 100;
+  document.getElementById('prep-fill').style.width = pct + '%';
+  if (prepSecondsLeft <= 10) {
+    document.getElementById('prep-timer').classList.add('warning');
+  }
+}
+
+function resetPrepTimer() {
+  clearInterval(prepInterval);
+  prepRunning = false;
+  prepSecondsLeft = 60;
+  const section = document.getElementById('prep-section');
+  section.classList.remove('visible');
+  const timer = document.getElementById('prep-timer');
+  if (timer) { timer.textContent = '1:00'; timer.classList.remove('warning'); }
+  const fill = document.getElementById('prep-fill');
+  if (fill) fill.style.width = '100%';
+}
+
+// Talk timer (2 minutes) for Part 2
+let talkInterval = null;
+let talkSeconds = 0;
+
+function startTalkTimer() {
+  talkSeconds = 120; // 2 minutes countdown
+  // We use the existing timer display, which already shows recording time
+  // Let's just add a label change
+}
+
+function stopTalkTimer() {
+  clearInterval(talkInterval);
+}
+
+// =============================================
+// TOAST
+// =============================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
