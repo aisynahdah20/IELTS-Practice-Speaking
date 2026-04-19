@@ -451,20 +451,22 @@
   }
 
   .download-btn:hover { border-color: var(--accent1); color: var(--accent1); }
-.delete-btn {
-  padding: 0.4rem 0.7rem;
-  font-size: 0.75rem;
-  border-radius: 7px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
 
-.delete-btn:hover { border-color: var(--danger); color: var(--danger); background: rgba(224,92,92,0.08); }
+  .delete-btn {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.75rem;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .delete-btn:hover { border-color: var(--danger); color: var(--danger); background: rgba(224,92,92,0.08); }
+
   /* PREP TIMER (Part 2) */
   .prep-section {
     background: rgba(124,111,205,0.08);
@@ -1280,7 +1282,7 @@ function saveRecording(p, stream) {
     a.click();
   };
 
- const delBtn = document.createElement('button');
+  const delBtn = document.createElement('button');
   delBtn.className = 'delete-btn';
   delBtn.textContent = '🗑';
   delBtn.title = 'Delete this recording';
@@ -1297,6 +1299,8 @@ function saveRecording(p, stream) {
   item.appendChild(dlBtn);
   item.appendChild(delBtn);
   list.insertBefore(item, list.firstChild);
+  showToast(`Recording #${idx} saved!`);
+}
 
 function startRecordTimer(p) {
   recSeconds[p] = 0;
