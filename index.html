@@ -1287,7 +1287,9 @@ function startRecordTimer(p) {
 
 function stopRecordTimer(p) {
   clearInterval(recTimer[p]);
+  recSeconds[p] = 0;
   const el = document.getElementById('timer-' + p);
+  el.textContent = '00:00';
   el.classList.remove('running');
 }
 
